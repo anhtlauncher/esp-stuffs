@@ -12,15 +12,15 @@ local ESP = {
 	Players = true,
 
 	-- components
-	Names = true,
-	Boxes = true,
+	Names = false,
+	Boxes = false,
 	Tracers = false,
-	Health = true,
+	Health = false,
 	
 	-- options
 	FaceCamera = false,
-	TeamColor = true,
-	TeamMates = true,
+	TeamColor = false,
+	TeamMates = false,
 
 	Font = 'UI',
 	TextSize = 19,
