@@ -50,10 +50,12 @@ local cam = workspace.CurrentCamera
 local plrs = game:GetService("Players")
 local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
-
 local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
-
+local PointToObjectSpace = CFrame.new().PointToObjectSpace
+local Cross = Vector3.new().Cross
+local Folder = Instance.new("Folder", game.CoreGui)
+local chars = {}
 local CharTable, Health = nil, nil
 for _, v in pairs(getgc(true)) do
 	if type(v) == "function" then
