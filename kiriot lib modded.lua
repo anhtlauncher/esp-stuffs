@@ -88,32 +88,6 @@ function ApplyPlayer(model)
     end
 end
 
-function ESP:Chams(bool)
-    chams = not chams
-    if chams then
-        for _, Player in next, game:GetService("Players"):GetChildren() do
-            ApplyModel(Player) wait()
-        end
-        for i,v in pairs(game:GetService("Players"):GetChildren()) do
-            CharacterAddedConnection = v.CharacterAdded:Connect(function(character)
-                ApplyPlayer(character)
-            end)
-        end
-    else
-        for _, Player in next, plrs:GetChildren() do
-            if Player.Character:FindFirstChild("Highlight") then
-                Player.Character:FindFirstChild("Highlight"):Destroy()
-            end
-        end
-        for i,v in pairs(workspace:GetDescendants()) do
-            if table.find(plrtable, v.Name) then
-                if v:FindFirstChild("Highlight") then v:FindFirstChild("Highlight"):Destroy() end
-            end
-        end
-        CharacterAddedConnection:Disconnect()
-    end
-end
-
 function ESP:GetColor(obj)
 	local ov = self.Overrides.GetColor
 	if ov then
@@ -342,6 +316,28 @@ function boxBase:Update()
 	else
 		self.Components.Tracer.Visible = false
 	end
+    if ESP.Chams then
+        for _, Player in next, game:GetService("Players"):GetChildren() do
+            ApplyModel(Player) wait()
+        end
+        for i,v in pairs(game:GetService("Players"):GetChildren()) do
+            CharacterAddedConnection = v.CharacterAdded:Connect(function(character)
+                ApplyPlayer(character)
+            end)
+        end
+    else
+        for _, Player in next, plrs:GetChildren() do
+            if Player.Character:FindFirstChild("Highlight") then
+                Player.Character:FindFirstChild("Highlight"):Destroy()
+            end
+        end
+        for i,v in pairs(workspace:GetDescendants()) do
+            if table.find(plrtable, v.Name) then
+                if v:FindFirstChild("Highlight") then v:FindFirstChild("Highlight"):Destroy() end
+            end
+        end
+        CharacterAddedConnection:Disconnect()
+    end
 end
 
 function ESP:Add(obj, options)
