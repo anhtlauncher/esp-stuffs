@@ -3,7 +3,7 @@ Written by Kiriot22
 Modifications made by wally and me yes
 So much skidded code and random tab style
 Best esp lib
-If you plan to use this thing then keep the credit
+If you plan to use this thing then keep the credit!
 ]]
 -- Settings
 local ESP = {
@@ -33,6 +33,8 @@ local ESP = {
 	ChamsTransparency = .5,
 	ChamsOutlineTransparency = 0,
 	ChamsOutlineColor = Color3.fromRGB(255, 255, 255),
+	UsePlrDistance = false,
+	MaxPlrDistance = math.huge,
 
 	Thickness = 2,
 	AttachShift = 1,
@@ -450,9 +452,18 @@ function ESP:Add(obj, options)
 		Thickness = 1,
 		Visible = self.Enabled and self.Health
 	})
-
+	local h = Instance.new("Highlight")
+	h.Enabled = ESP.Chams
+	h.FillTransparency = .35
+	h.OutlineTransparency = .35
+	h.FillColor = ESP.Color
+	h.OutlineColor = ESP.ChamsOutlineColor
+	h.DepthMode = 0
+	h.Name = GenerateName(x)
+	h.Parent = Folder
+	h.Adornee = obj
+	box.Components["Highlight"] = h
 	self.Objects[obj] = box
-	
 	obj.AncestryChanged:Connect(function(_, parent)
 		if parent == nil and ESP.AutoRemove ~= false then
 			box:Remove()
@@ -472,21 +483,6 @@ function ESP:Add(obj, options)
 			end
 		end)
 	end
-	
-	local h = Instance.new("Highlight")
-	h.Enabled = ESP.Chams
-	h.FillTransparency = .35
-	h.OutlineTransparency = .35
-	h.FillColor = ESP.Color
-	h.OutlineColor = ESP.ChamsOutlineColor
-	h.DepthMode = 0
-	h.Name = GenerateName(x)
-	h.Parent = Folder
-	h.Adornee = obj
-	box.Components["Highlight"] = h
-
-end
-
 	return box
 end
 
