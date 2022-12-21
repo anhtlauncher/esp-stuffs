@@ -1,6 +1,10 @@
--- Written by Kiriot22
--- Modifications made by wally and me yes
-
+--[[ 
+Written by Kiriot22
+Modifications made by wally and me yes
+So much skidded code and random tab style
+Best esp lib
+If you plan to use this thing then keep the credit
+]]
 -- Settings
 local ESP = {
 	-- flags
@@ -318,7 +322,7 @@ function boxBase:Update()
 		if Vis5 then
             		self.Components.Distance.Visible = true
 			self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
-			self.Components.Distance.Text = distance .."m away"
+			self.Components.Distance.Text = distance .."studs away"
 			self.Components.Distance.Color = color
             		self.Components['Distance'].Size = ESP.FontSize
             		self.Components['Distance'].ZIndex = IsPlrHighlighted and 2 or 1
@@ -360,17 +364,17 @@ function boxBase:Update()
     else
         for _, Player in next, plrs:GetChildren() do
             if Player.Character:FindFirstChild("Highlight") then
-                Player.Character:FindFirstChild("Highlight"):Destroy()
+                Player.Character:FindFirstChild("Highlight").Visible = false
             end
         end
         for i,v in pairs(workspace:GetDescendants()) do
             if table.find(plrtable, v.Name) then
-                if v:FindFirstChild("Highlight") then v:FindFirstChild("Highlight"):Destroy() end
+                if v:FindFirstChild("Highlight") then v:FindFirstChild.Visible = false end
             end
         end
         CharacterAddedConnection:Disconnect()
     end
-		if ESP.Health then
+	if ESP.Health then
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
 			if self.Player then
