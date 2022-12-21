@@ -74,6 +74,20 @@ for _, v in pairs(getgc(true)) do
 end
 
 --Functions--
+function ApplyModel(model)
+    if not model:FindFirstChild("Highlight") then
+        local highlight = Instance.new("Highlight")
+        highlight.Parent = model.Character
+        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    end
+    end
+function ApplyPlayer(model)
+    if not model:FindFirstChild("Highlight") then
+        local highlight = Instance.new("Highlight")
+        highlight.Parent = model
+        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    end
+end
 function BrahWth(position)
 	local screenPosition, onScreen = WorldToViewportPoint(cam, position)
 	return Vector2.new(screenPosition.X, screenPosition.Y), onScreen, screenPosition.Z
