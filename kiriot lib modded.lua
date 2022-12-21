@@ -361,9 +361,9 @@ function boxBase:Update()
 	else
 		self.Components.Tracer.Visible = false
 	end
---[[
+
     if ESP.Chams then
-		local TorsoPos, Vis12 = WorldToViewportPoint(cam, locs.Torso.p)
+		--[[local TorsoPos, Vis12 = WorldToViewportPoint(cam, locs.Torso.p)
 		if Vis12 then
 			self.Components.Highlight.Enabled = true
 			self.Components.Highlight.FillColor = color
@@ -375,11 +375,34 @@ function boxBase:Update()
 		end
 	else
 		self.Components.Highlight.Enabled = false
-	end
+	end]]
+	
+	-- this 1 is buggy but works
+	for _, Player in next, game:GetService("Players"):GetChildren() do
+            ApplyModel(Player) wait()
+        end
+        for i,v in pairs(game:GetService("Players"):GetChildren()) do
+            CharacterAddedConnection = v.CharacterAdded:Connect(function(character)
+                ApplyPlayer(character)
+            end)
+        end
+    else
+        for _, Player in next, plrs:GetChildren() do
+            if Player.Character:FindFirstChild("Highlight") then
+                Player.Character:FindFirstChild("Highlight"):Destroy()
+            end
+        end
+        for i,v in pairs(workspace:GetDescendants()) do
+            if table.find(plrtable, v.Name) then
+                if v:FindFirstChild("Highlight") then v:FindFirstChild("Highlight"):Destroy() end
+            end
+        end
+        CharacterAddedConnection:Disconnect()
     end
-]]
-	if ESP.Health then
-		local onScreen, size, position = GetBoundingBox(locs.Torso)
+    end
+
+	if ESP.Health then 
+	--[[	local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
 			if self.Player then
                 local Health, MaxHealth = Health:getplayerhealth(self.Player)
@@ -405,7 +428,7 @@ function boxBase:Update()
 	else
 		self.Components.HealthBar.Visible = false
 		self.Components.HealthBarOutline.Visible = false
-	end
+	end ]]
 end
 
 function ESP:Add(obj, options)
@@ -475,6 +498,7 @@ function ESP:Add(obj, options)
 		Thickness = 1,
 		Visible = self.Enabled and self.Health
 	})
+-- for the not working chams :/ but ill keep it here
 --[[
 	local h = Instance.new("Highlight")
 	h.Enabled = ESP.Chams
