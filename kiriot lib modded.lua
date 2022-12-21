@@ -340,6 +340,7 @@ function boxBase:Update()
 	else
 		self.Components.Tracer.Visible = false
 	end
+--[[
     if ESP.Chams then
 		local TorsoPos, Vis12 = WorldToViewportPoint(cam, locs.Torso.p)
 		if Vis12 then
@@ -355,6 +356,7 @@ function boxBase:Update()
 		self.Components.Highlight.Enabled = false
 	end
     end
+]]
 	if ESP.Health then
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
@@ -452,6 +454,7 @@ function ESP:Add(obj, options)
 		Thickness = 1,
 		Visible = self.Enabled and self.Health
 	})
+--[[
 	local h = Instance.new("Highlight")
 	h.Enabled = ESP.Chams
 	h.FillTransparency = .35
@@ -462,7 +465,8 @@ function ESP:Add(obj, options)
 	h.Name = GenerateName(x)
 	h.Parent = Folder
 	h.Adornee = obj
-	box.Components["Highlight"] = h
+	box.Components["Highlight"] = h 
+]]
 	self.Objects[obj] = box
 	obj.AncestryChanged:Connect(function(_, parent)
 		if parent == nil and ESP.AutoRemove ~= false then
