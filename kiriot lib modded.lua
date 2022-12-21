@@ -72,6 +72,19 @@ for _, v in pairs(getgc(true)) do
 end
 
 --Functions--
+function BrahWth(position)
+	local screenPosition, onScreen = WorldToViewportPoint(cam, position)
+	return Vector2.new(screenPosition.X, screenPosition.Y), onScreen, screenPosition.Z
+end
+
+local function round(number)
+	if (typeof(number) == "Vector2") then
+		return Vector2.new(round(number.X), round(number.Y))
+	else
+		return math.floor(number)
+	end
+end
+
 function GetBoundingBox(torso)
 	local torsoPosition, onScreen, depth = BrahWth(torso.Position)
 	local scaleFactor = 1 / (math.tan(math.rad(cam.FieldOfView * .5)) * 2 * depth) * 1e3
