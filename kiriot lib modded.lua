@@ -11,7 +11,8 @@ local ESP = {
 	Names = true,
 	Boxes = true,
 	Tracers = false,
-
+	Health = true,
+	
 	-- options
 	FaceCamera = false,
 	TeamColor = true,
@@ -19,6 +20,8 @@ local ESP = {
 
 	Font = 'UI',
 	TextSize = 19,
+	HealthOffsetX = 4,
+	HealthOffsetY = -2,
 
 	BoxShift = CFrame.new(0, -1.5, 0),
 	BoxSize = Vector3.new(4, 6, 0),
@@ -41,6 +44,23 @@ local mouse = plr:GetMouse()
 
 local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
+
+local CharTable, Health = nil, nil
+for _, v in pairs(getgc(true)) do
+	if type(v) == "function" then
+		if debug.getinfo(v).name == "getbodyparts" then
+			CharTable = debug.getupvalue(v, 1)
+        end
+	end
+    if type(v) == "table" then
+        if rawget(v, "getplayerhealth") then
+            Health = v
+        end
+    end
+	if CharTable and Health then
+		break
+	end
+end
 
 --Functions--
 local function Draw(obj, props)
@@ -276,27 +296,39 @@ function boxBase:Update()
 			self.Components.Name.Text = self.Name
 			self.Components.Name.Color = color
 			
-			self.Components.Distance.Visible = true
-			self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
-			self.Components.Distance.Text = distance .."m away"
-			self.Components.Distance.Color = color
+
 
 			self.Components['Name'].Size = ESP.FontSize
-			self.Components['Distance'].Size = ESP.FontSize
 
 			self.Components['Name'].ZIndex = IsPlrHighlighted and 2 or 1
-			self.Components['Distance'].ZIndex = IsPlrHighlighted and 2 or 1
 
 			if Drawing.Fonts and Drawing.Fonts[ESP.Font] then
 				self.Components['Name'].Font = Drawing.Fonts[ESP.Font]
-				self.Components['Distance'].Font = Drawing.Fonts[ESP.Font]
 			end
 		else
 			self.Components.Name.Visible = false
-			self.Components.Distance.Visible = false
 		end
 	else
 		self.Components.Name.Visible = false
+	end
+	
+	if ESP.Distance then
+		local TagPos, Vis5 = WorldToViewportPoint(cam, locs.TagPos.p)
+		
+		if Vis5 then
+            		self.Components.Distance.Visible = true
+			self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
+			self.Components.Distance.Text = distance .."m away"
+			self.Components.Distance.Color = color
+            		self.Components['Distance'].Size = ESP.FontSize
+            		self.Components['Distance'].ZIndex = IsPlrHighlighted and 2 or 1
+        		if Drawing.Fonts and Drawing.Fonts[ESP.Font] then
+				self.Components['Distance'].Font = Drawing.Fonts[ESP.Font]
+			end
+		else
+			self.Components.Distance.Visible = false
+		end
+	else
 		self.Components.Distance.Visible = false
 	end
 	
@@ -338,6 +370,34 @@ function boxBase:Update()
         end
         CharacterAddedConnection:Disconnect()
     end
+		if ESP.Health then
+		local onScreen, size, position = GetBoundingBox(locs.Torso)
+		if onScreen and size and position then
+			if self.Player then
+                local Health, MaxHealth = Health:getplayerhealth(self.Player)
+				local healthBarSize = round(Vector2.new(1, -(size.Y * (Health / MaxHealth))))
+				local healthBarPosition = round(Vector2.new(position.X - (3 + healthBarSize.X), position.Y + size.Y))
+				local g = Color3.fromRGB(0, 255, 8)
+				local r = Color3.fromRGB(255, 0, 0)
+				self.Components.HealthBar.Visible = true
+				self.Components.HealthBar.Color = r:lerp(g, Health / MaxHealth)
+				self.Components.HealthBar.Transparency = 1
+				self.Components.HealthBar.Size = healthBarSize
+				self.Components.HealthBar.Position = healthBarPosition
+				self.Components.HealthBarOutline.Visible = true
+				self.Components.HealthBarOutline.Transparency = 1
+				self.Components.HealthBarOutline.Size = round(Vector2.new(healthBarSize.X, -size.Y) + Vector2.new(2, -2))
+				self.Components.HealthBarOutline.Position = healthBarPosition - Vector2.new(1, -1)
+
+			end
+		else
+			self.Components.HealthBar.Visible = false
+			self.Components.HealthBarOutline.Visible = false
+		end
+	else
+		self.Components.HealthBar.Visible = false
+		self.Components.HealthBarOutline.Visible = false
+	end
 end
 
 function ESP:Add(obj, options)
@@ -395,6 +455,19 @@ function ESP:Add(obj, options)
 		Transparency = 1,
 		Visible = self.Enabled and self.Tracers
 	})
+	
+	box.Components["HealthBarOutline"] = Draw("Square", {
+		Transparency = 1,
+		Thickness = 1,
+		Filled = true,
+		Visible = self.Enabled and self.Health
+	})
+	box.Components["HealthBar"] = Draw("Square", {
+		Transparency = 1,
+		Thickness = 1,
+		Visible = self.Enabled and self.Health
+	})
+
 	self.Objects[obj] = box
 	
 	obj.AncestryChanged:Connect(function(_, parent)
