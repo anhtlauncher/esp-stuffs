@@ -484,26 +484,7 @@ function ESP:Add(obj, options)
 	h.Parent = Folder
 	h.Adornee = obj
 	box.Components["Highlight"] = h
-	self.Objects[obj] = box
-	obj.AncestryChanged:Connect(function(_, parent)
-		if parent == nil and ESP.AutoRemove ~= false then
-			box:Remove()
-		end
-	end)
-	obj:GetPropertyChangedSignal("Parent"):Connect(function()
-		if obj.Parent == nil and ESP.AutoRemove ~= false then
-			box:Remove()
-		end
-	end)
-	local hum = obj:FindFirstChildOfClass("Humanoid")
-	if hum and not ESP.IgnoreHumanoids then
-		hum.Died:Connect(function()
-			if ESP.AutoRemove ~= false then
-				box:Remove()
-			end
-		end)
-	end
-	end
+
 end
 
 	return box
