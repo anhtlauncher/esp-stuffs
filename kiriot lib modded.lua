@@ -73,6 +73,15 @@ for _, v in pairs(getgc(true)) do
 	end
 end
 
+task.spawn(function()
+    while wait(1) do
+        plrtable = {}
+        for i,v in pairs(plrs:GetChildren()) do
+            table.insert(plrtable, v)
+        end
+    end
+end)
+
 --Functions--
 function ApplyModel(model)
     if not model:FindFirstChild("Highlight") then
