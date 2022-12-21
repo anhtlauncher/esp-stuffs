@@ -24,12 +24,15 @@ local ESP = {
 
 	Font = 'UI',
 	TextSize = 19,
-	HealthOffsetX = 4,
-	HealthOffsetY = -2,
 
 	BoxShift = CFrame.new(0, -1.5, 0),
 	BoxSize = Vector3.new(4, 6, 0),
 	Color = Color3.fromRGB(255, 170, 0),
+	HealthOffsetX = 4,
+	HealthOffsetY = -2,
+	ChamsTransparency = .5,
+	ChamsOutlineTransparency = 0,
+	ChamsOutlineColor = Color3.fromRGB(255, 255, 255),
 
 	Thickness = 2,
 	AttachShift = 1,
@@ -338,13 +341,11 @@ function boxBase:Update()
 	
 	if ESP.Tracers then
 		local TorsoPos, Vis6 = WorldToViewportPoint(cam, locs.Torso.p)
-
 		if Vis6 then
 			self.Components.Tracer.Visible = true
 			self.Components.Tracer.From = Vector2.new(TorsoPos.X, TorsoPos.Y)
 			self.Components.Tracer.To = Vector2.new(cam.ViewportSize.X/2,cam.ViewportSize.Y/ESP.AttachShift)
 			self.Components.Tracer.Color = color
-
 			self.Components['Tracer'].ZIndex = IsPlrHighlighted and 2 or 1
 		else
 			self.Components.Tracer.Visible = false
@@ -353,26 +354,19 @@ function boxBase:Update()
 		self.Components.Tracer.Visible = false
 	end
     if ESP.Chams then
-        for _, Player in next, game:GetService("Players"):GetChildren() do
-            ApplyModel(Player) wait()
-        end
-        for i,v in pairs(game:GetService("Players"):GetChildren()) do
-            CharacterAddedConnection = v.CharacterAdded:Connect(function(character)
-                ApplyPlayer(character)
-            end)
-        end
-    else
-        for _, Player in next, plrs:GetChildren() do
-            if Player.Character:FindFirstChild("Highlight") then
-                Player.Character:FindFirstChild("Highlight").Visible = false
-            end
-        end
-        for i,v in pairs(workspace:GetDescendants()) do
-            if table.find(plrtable, v.Name) then
-                if v:FindFirstChild("Highlight") then v:FindFirstChild.Visible = false end
-            end
-        end
-        CharacterAddedConnection:Disconnect()
+		local TorsoPos, Vis12 = WorldToViewportPoint(cam, locs.Torso.p)
+		if Vis12 then
+			self.Components.Highlight.Enabled = true
+			self.Components.Highlight.FillColor = color
+			self.Components.Highlight.FillTransparency = ESP.ChamsTransparency
+			self.Components.Highlight.OutlineTransparency = ESP.ChamsOutlineTransparency
+			self.Components.Highlight.OutlineColor = ESP.ChamsOutlineColor
+		else
+			self.Components.Highlight.Enabled = false
+		end
+	else
+		self.Components.Highlight.Enabled = false
+	end
     end
 	if ESP.Health then
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
@@ -493,6 +487,39 @@ function ESP:Add(obj, options)
 			end
 		end)
 	end
+	
+	local h = Instance.new("Highlight")
+	h.Enabled = ESP.Chams
+	h.FillTransparency = .35
+	h.OutlineTransparency = .35
+	h.FillColor = ESP.Color
+	h.OutlineColor = ESP.ChamsOutlineColor
+	h.DepthMode = 0
+	h.Name = GenerateName(x)
+	h.Parent = Folder
+	h.Adornee = obj
+	box.Components["Highlight"] = h
+	self.Objects[obj] = box
+	obj.AncestryChanged:Connect(function(_, parent)
+		if parent == nil and ESP.AutoRemove ~= false then
+			box:Remove()
+		end
+	end)
+	obj:GetPropertyChangedSignal("Parent"):Connect(function()
+		if obj.Parent == nil and ESP.AutoRemove ~= false then
+			box:Remove()
+		end
+	end)
+	local hum = obj:FindFirstChildOfClass("Humanoid")
+	if hum and not ESP.IgnoreHumanoids then
+		hum.Died:Connect(function()
+			if ESP.AutoRemove ~= false then
+				box:Remove()
+			end
+		end)
+	end
+	end
+end
 
 	return box
 end
