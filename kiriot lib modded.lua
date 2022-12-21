@@ -72,6 +72,13 @@ for _, v in pairs(getgc(true)) do
 end
 
 --Functions--
+function GetBoundingBox(torso)
+	local torsoPosition, onScreen, depth = BrahWth(torso.Position)
+	local scaleFactor = 1 / (math.tan(math.rad(cam.FieldOfView * .5)) * 2 * depth) * 1e3
+	local size = round(Vector2.new(4 * scaleFactor, 5 * scaleFactor))
+	return onScreen, size, round(Vector2.new(torsoPosition.X - (size.X * .5), torsoPosition.Y - (size.Y * .5))), torsoPosition
+end
+
 local function Draw(obj, props)
 	local new = Drawing.new(obj)
 	
@@ -246,7 +253,6 @@ function boxBase:Update()
 	end
 
 	self.Distance = distance;
-
 	local size = self.Size
 	local locs = {
 		TopLeft 	= cf * ESP.BoxShift * CFrame.new(size.X   / 2,  size.Y / 2, 0),
@@ -312,7 +318,7 @@ function boxBase:Update()
 		if Vis5 then
             		self.Components.Distance.Visible = true
 			self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
-			self.Components.Distance.Text = distance .."studs away"
+			self.Components.Distance.Text = distance .." studs away"
 			self.Components.Distance.Color = color
             		self.Components['Distance'].Size = ESP.FontSize
             		self.Components['Distance'].ZIndex = IsPlrHighlighted and 2 or 1
