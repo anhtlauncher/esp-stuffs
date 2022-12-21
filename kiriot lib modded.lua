@@ -100,21 +100,6 @@ function ESP:IsTeamMate(p)
 	return self:GetTeam(p) == self:GetTeam(plr)
 end
 
-function ApplyModel(model)
-    if not model:FindFirstChild("Highlight") then
-        local highlight = Instance.new("Highlight")
-        highlight.Parent = model.Character
-        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    end
-    end
-function ApplyPlayer(model)
-    if not model:FindFirstChild("Highlight") then
-        local highlight = Instance.new("Highlight")
-        highlight.Parent = model
-        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    end
-end
-
 function ESP:GetColor(obj)
 	local ov = self.Overrides.GetColor
 	if ov then
