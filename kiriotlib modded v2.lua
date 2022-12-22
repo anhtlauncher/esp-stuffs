@@ -1,3 +1,8 @@
+--[[
+. Written by Kiriot22 i guess lol
+. Modded by Anhtlauncher#5823
+. Keep credit pls
+]]
 local ESP = {
 	Enabled = false,
 	Players = true,
@@ -7,8 +12,8 @@ local ESP = {
 	MaxPlrDistance = math.huge,
 	Boxes = false,
 	Health = false,
---[[	HealthBar = false,
-	HealthText = false, ]]
+	HealthBar = false,
+	HealthText = false,
 	HealthOffsetX = 4,
 	HealthOffsetY = -2,
 	Items = false,
