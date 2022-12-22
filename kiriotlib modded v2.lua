@@ -6,8 +6,9 @@ local ESP = {
 	UsePlrDistance = false,
 	MaxPlrDistance = math.huge,
 	Boxes = false,
-	HealthBar = false,
-	HealthText = false,
+	Health = false,
+--[[	HealthBar = false,
+	HealthText = false, ]]
 	HealthOffsetX = 4,
 	HealthOffsetY = -2,
 	Items = false,
@@ -373,7 +374,7 @@ function boxBase:Update()
 	else
 		self.Components.Tracer.Visible = false
 	end
-	if ESP.HealthBar then -- Healthbar
+	if ESP.Health then -- Healthbar
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
 			if self.Object and self.Object:FindFirstChildOfClass("Humanoid") then
@@ -400,7 +401,7 @@ function boxBase:Update()
 		self.Components.HealthBar.Visible = false
 		self.Components.HealthBarOutline.Visible = false
 	end
-  if ESP.HealthText then -- health text
+--[[  if ESP.HealthText then -- health text
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
 			if self.Object and self.Object:FindFirstChildOfClass("Humanoid") then
@@ -415,6 +416,7 @@ function boxBase:Update()
 	else
 		self.Components.HealthText.Visible = false
 	end
+]]
 	if ESP.Items then -- item esp
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
