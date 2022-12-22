@@ -410,7 +410,12 @@ function boxBase:Update()
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
 			if self.Object and self.Object:FindFirstChildOfClass("Humanoid") then
-                self.Components.HealthText.Visible = true
+				local Health, MaxHealth = self.Object:FindFirstChildOfClass("Humanoid").Health, self.Object:FindFirstChildOfClass("Humanoid").MaxHealth
+				local healthBarSize = round(Vector2.new(1, -(size.Y * (Health / MaxHealth))))
+				local healthBarPosition = round(Vector2.new(position.X - (3 + healthBarSize.X), position.Y + size.Y))
+				local g = Color3.fromRGB(0, 255, 8)
+				local r = Color3.fromRGB(255, 0, 0)
+                		self.Components.HealthText.Visible = true
 				self.Components.HealthText.Color = r:lerp(g, Health / MaxHealth)
 				self.Components.HealthText.Text = math.floor(Health + .5) .. " | " .. MaxHealth
 				self.Components.HealthText.Position = round(position + Vector2.new(size.X + 3, -3))
