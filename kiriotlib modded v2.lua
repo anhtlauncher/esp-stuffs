@@ -406,7 +406,7 @@ function boxBase:Update()
 		self.Components.HealthBar.Visible = false
 		self.Components.HealthBarOutline.Visible = false
 	end
---[[  if ESP.HealthText then -- health text
+  if ESP.HealthText then -- health text
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
 			if self.Object and self.Object:FindFirstChildOfClass("Humanoid") then
@@ -421,7 +421,6 @@ function boxBase:Update()
 	else
 		self.Components.HealthText.Visible = false
 	end
-]]
 	if ESP.Items then -- item esp
 		local onScreen, size, position = GetBoundingBox(locs.Torso)
 		if onScreen and size and position then
