@@ -340,7 +340,7 @@ function boxBase:Update()
 		if onScreen and size and position then
 			self.Components.Distance.Visible = true
 			self.Components.Distance.Position = round(position + Vector2.new(size.X * 0.5, size.Y + 1))
-			self.Components.Distance.Text = math.floor((cam.CFrame.Position - cf.Position).magnitude) .. "m"
+			self.Components.Distance.Text = math.floor((cam.CFrame.Position - cf.Position).magnitude) .. " studs"
 			self.Components.Distance.Color = color
 			if self.Player and WhitelistPlayer[self.Player.Name] then
 				self.Components.Distance.Color = ESP.WhitelistColor
